@@ -1,1 +1,604 @@
 
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>住院醫師座談暨微型分享餐會會前調查</title>
+    <!-- 載入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Noto+Sans+TC:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* 使用 Inter 搭配 Noto Sans TC 確保中英文顯示清晰 */
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            background-color: #f0f4f8; /* Light blue-gray background */
+        }
+        /* 自訂 Tailwind 配置，使用天空藍為主題色 */
+        :root {
+            --color-primary: #0ea5e9; /* sky-500 */
+        }
+        .form-label {
+            @apply block text-sm font-bold text-gray-700 mb-1;
+        }
+        .form-input, .form-select, .form-textarea {
+            @apply w-full border border-gray-300 rounded-xl p-3 focus:ring-sky-500 focus:border-sky-500 transition duration-200 ease-in-out shadow-sm;
+        }
+        .required-tag {
+            @apply text-red-500 ml-1;
+        }
+        /* 美化單選/複選框 */
+        input[type="radio"]:checked, input[type="checkbox"]:checked {
+            accent-color: var(--color-primary);
+        }
+        /* 美化選項卡 */
+        .choice-card {
+            @apply inline-flex items-center p-4 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-sky-50 hover:border-sky-300 transition duration-150 ease-in-out shadow-sm;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <div id="app" class="max-w-4xl mx-auto">
+        <header class="text-center mb-10 p-6 bg-white rounded-xl shadow-2xl border-t-8 border-sky-500">
+            <h1 class="text-3xl sm:text-4xl font-black text-gray-800 mb-2">住院醫師座談暨微型分享餐會</h1>
+            <h2 class="text-xl font-semibold text-sky-700 mb-4">會前調查與報名表</h2>
+            
+            <p class="text-gray-600 max-w-2xl mx-auto mb-6 text-base">
+                本座談會是您與醫院高層的直接溝通平台，旨在「精準且高效」地解決您在臨床、教學、福利與生活上， 需要「跨科部」或「院方高層」協調 的系統性問題。
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left p-4 bg-sky-50 rounded-lg shadow-inner">
+                <div>
+                    <p class="font-bold text-sky-800 mb-2 flex items-center">
+                        <svg class="w-5 h-5 mr-1 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20h-5.356m0 0a3 3 0 01-4.76-3.755L2 13v-3a2 2 0 012-2h2.236l2.39-5.464A1 1 0 0110 3h4a1 1 0 01.954.536L17.764 8H20a2 2 0 012 2v3l-1.356 3.429m-9.309-2.31l-3.351 2.502L20 20"></path></svg>
+                        ✦ 與會長官 (代表院方重視)
+                    </p>
+                    <ul class="text-sm text-gray-700 list-disc list-inside ml-2 space-y-1">
+                        <li>陳志成 副院長</li>
+                        <li>教學部 廖家德部長</li>
+                        <li>品管部 杜漢祥部長</li>
+                        <li>病資室 吳惠美組長</li>
+                        <li>科部 教學負責人</li>
+                    </ul>
+                </div>
+                <div>
+                    <p class="font-bold text-sky-800 mb-2 flex items-center">
+                        <svg class="w-5 h-5 mr-1 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h.01M16 16h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        ✦ 重要日期提醒
+                    </p>
+                    <div class="space-y-2 text-base pl-2">
+                        <p class="text-gray-700"><span class="font-semibold text-sky-700">會議時間：</span> 12月3日(三) 12:00 (暫定)</p>
+                        <p class="text-gray-700"><span class="font-semibold text-red-600">截止日期：</span> 11月24日 (星期三) 中午12:00前</p>
+                        <p class="text-gray-700"><span class="font-semibold text-sky-700">填寫所需：</span> 約 3 分鐘</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <form id="registrationForm" class="space-y-10">
+            <!-- 彈出訊息框 (代替 alert()) -->
+            <div id="messageBox" class="fixed inset-0 bg-gray-600 bg-opacity-75 hidden items-center justify-center z-50">
+                <div class="bg-white p-8 rounded-xl shadow-2xl max-w-sm w-full text-center">
+                    <h3 class="text-2xl font-bold text-sky-600 mb-4" id="messageTitle"></h3>
+                    <p class="text-gray-700 mb-6" id="messageText"></p>
+                    <button type="button" onclick="closeMessageBox()" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-6 rounded-lg transition duration-200">
+                        確定
+                    </button>
+                </div>
+            </div>
+
+            <!-- SECTION 1: 基本資料 -->
+            <section class="bg-white p-6 sm:p-8 rounded-xl shadow-lg border-l-4 border-sky-500">
+                <h3 class="text-2xl font-bold text-sky-700 mb-6 flex items-center">
+                    <svg class="w-6 h-6 mr-3 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                    一、 基本資料 <span class="text-sm text-gray-500 font-normal ml-2">（必填）</span>
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Q1: 科別 -->
+                    <div>
+                        <label for="department" class="form-label">1. 科別<span class="required-tag">*</span></label>
+                        <select id="department" name="department" class="form-select" required>
+                            <option value="">-- 請選擇您的科別 --</option>
+                            <option value="內科部">內科部</option>
+                            <option value="外科部">外科部</option>
+                            <option value="婦產科">婦產科</option>
+                            <option value="兒科部">兒科部</option>
+                            <option value="骨科部">骨科部</option>
+                            <option value="家庭醫學部">家庭醫學部</option>
+                            <option value="急診醫學部">急診醫學部</option>
+                            <option value="復健部">復健部</option>
+                            <option value="耳鼻喉部">耳鼻喉部</option>
+                            <option value="放射診斷部">放射診斷部</option>
+                            <option value="放射腫瘤部">放射腫瘤部</option>
+                            <option value="病理部">病理部</option>
+                            <option value="精神醫學部">精神醫學部</option>
+                            <option value="麻醉部">麻醉部</option>
+                            <option value="眼科部">眼科部</option>
+                            <option value="其他">其他</option>
+                        </select>
+                    </div>
+
+                    <!-- Q2: 職級 -->
+                    <div>
+                        <label for="rank" class="form-label">2. 職級<span class="required-tag">*</span></label>
+                        <select id="rank" name="rank" class="form-select" required>
+                            <option value="">-- 請選擇您的職級 --</option>
+                            <option value="R1">R1</option>
+                            <option value="R2">R2</option>
+                            <option value="R3">R3</option>
+                            <option value="R4">R4</option>
+                            <option value="R5">R5</option>
+                            <option value="R6">R6</option>
+                            <option value="CR">CR</option>
+                        </select>
+                    </div>
+
+                    <!-- Q3: 姓名 -->
+                    <div>
+                        <label for="name" class="form-label">3. 姓名<span class="required-tag">*</span></label>
+                        <input type="text" id="name" name="name" class="form-input" placeholder="請輸入姓名" required>
+                    </div>
+                </div>
+
+                <!-- Q4: 出席 -->
+                <div class="mt-8">
+                    <p class="form-label">4. 出席<span class="required-tag">*</span></p>
+                    <div class="flex flex-wrap gap-4 mt-2" id="attendanceOptions">
+                        <label class="choice-card">
+                            <input type="radio" name="attendance" value="出席" class="w-5 h-5" required>
+                            <span class="ml-2 text-gray-800 font-medium">出席</span>
+                        </label>
+                        <label class="choice-card">
+                            <input type="radio" name="attendance" value="不克出席" class="w-5 h-5" required>
+                            <span class="ml-2 text-gray-800 font-medium">不克出席</span>
+                        </label>
+                    </div>
+                </div>
+            
+                <!-- Q5: 餐點 (條件顯示區塊) -->
+                <div id="mealSection" class="hidden mt-8 pt-6 border-t border-sky-100">
+                    <p class="form-label text-base">5. 餐點：<span class="required-tag">*</span></p>
+                    <div class="flex flex-wrap gap-4 mt-2">
+                        <label class="choice-card">
+                            <input type="radio" name="meal" value="葷食" class="w-5 h-5" required>
+                            <span class="ml-2 text-gray-800 font-medium">葷食</span>
+                        </label>
+                        <label class="choice-card">
+                            <input type="radio" name="meal" value="素食" class="w-5 h-5" required>
+                            <span class="ml-2 text-gray-800 font-medium">素食</span>
+                        </label>
+                        <label class="choice-card">
+                            <input type="radio" name="meal" value="不需要，可自理" class="w-5 h-5" required>
+                            <span class="ml-2 text-gray-800 font-medium">不需要，可自理</span>
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: 議題提案 (主要區塊) -->
+            <section class="bg-white p-6 sm:p-8 rounded-xl shadow-lg border-l-4 border-sky-500">
+                <h3 class="text-2xl font-bold text-sky-700 mb-6 flex items-center">
+                    <svg class="w-6 h-6 mr-3 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                    二、 議題提案 <span class="text-sm text-gray-500 font-normal ml-2">（必填/若無議題可跳過）</span>
+                </h3>
+
+                <!-- Q6: 提案意願 -->
+                <div class="mb-6">
+                    <p class="form-label">6. 您目前是否有「需院方高層協助」解決的議題？<span class="required-tag">*</span></p>
+                    <div class="flex flex-wrap gap-4 mt-2" id="issueIntentOptions">
+                        <label class="choice-card">
+                            <input type="radio" name="hasIssue" value="是" class="w-5 h-5" required>
+                            <span class="ml-2 text-gray-800 font-medium">是 (請填寫下方7.欄位)</span>
+                        </label>
+                        <label class="choice-card">
+                            <input type="radio" name="hasIssue" value="否" class="w-5 h-5" required>
+                            <span class="ml-2 text-gray-800 font-medium">否 (可跳至第三區)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Q7-Q10: 提案內容 (條件顯示區塊) -->
+                <div id="issueDetailsSection" class="border-t pt-6 border-sky-100 hidden space-y-6">
+
+                    <!-- Q7: 議題類別 (可複選) -->
+                    <div>
+                        <label class="form-label">7. 議題類別：<span class="text-gray-500 font-normal">(可複選)</span></label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+                            <label class="choice-card">
+                                <input type="checkbox" name="issueType" value="臨床流程" class="w-5 h-5 rounded">
+                                <span class="ml-2 text-gray-800">臨床流程 (如：跨科照會、轉診、IT系統)</span>
+                            </label>
+                            <label class="choice-card">
+                                <input type="checkbox" name="issueType" value="教學訓練" class="w-5 h-5 rounded">
+                                <span class="ml-2 text-gray-800">教學訓練 (如：課程安排、評核、導師制度)</span>
+                            </label>
+                            <label class="choice-card">
+                                <input type="checkbox" name="issueType" value="福利與設備" class="w-5 h-5 rounded">
+                                <span class="ml-2 text-gray-800">福利與設備 (如：值班室、餐廳、交通)</span>
+                            </label>
+                            <label class="choice-card">
+                                <input type="checkbox" name="issueType" value="病人安全" class="w-5 h-5 rounded">
+                                <span class="ml-2 text-gray-800">病人安全 (如：通報系統、SOP)</span>
+                            </label>
+                            <label class="choice-card">
+                                <input type="checkbox" name="issueType" value="職涯發展" class="w-5 h-5 rounded">
+                                <span class="ml-2 text-gray-800">職涯發展</span>
+                            </label>
+                            <label class="choice-card">
+                                <input type="checkbox" name="issueType" value="其他" class="w-5 h-5 rounded">
+                                <span class="ml-2 text-gray-800">其他</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Q8: 案由說明 -->
+                    <div>
+                        <label for="issueDescription" class="form-label">8. 案由說明</label>
+                        <p class="text-xs text-gray-500 mb-2">請簡述您遇到的「具體」困難，以及它如何影響臨床工作或住院醫師福祉。</p>
+                        <textarea id="issueDescription" name="issueDescription" class="form-textarea h-32" placeholder="請輸入說明..."></textarea>
+                    </div>
+
+                    <!-- Q9: 建議方案 -->
+                    <div>
+                        <label for="issueSuggestion" class="form-label">9. 建議方案</label>
+                        <p class="text-xs text-gray-500 mb-2">您認為「醫院層級」可以如何協助？請提出「具體」建議。</p>
+                        <textarea id="issueSuggestion" name="issueSuggestion" class="form-textarea h-32" placeholder="請輸入建議..."></textarea>
+                    </div>
+
+                    <!-- Q10: 提案隱私 -->
+                    <div>
+                        <p class="form-label">10. 提案隱私：<span class="required-tag">*</span></p>
+                        <div class="flex flex-col space-y-3 mt-2">
+                            <label class="choice-card">
+                                <input type="radio" name="issuePrivacy" value="具名公開" class="w-5 h-5" required>
+                                <span class="ml-2 text-gray-800">我同意公開科別/職級，並於會中具名發言。</span>
+                            </label>
+                            <label class="choice-card">
+                                <input type="radio" name="issuePrivacy" value="匿名提出" class="w-5 h-5" required>
+                                <span class="ml-2 text-gray-800">「匿名」提出此案 (僅顯示科別)。</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: 微型學習分享會 -->
+            <section class="bg-white p-6 sm:p-8 rounded-xl shadow-lg border-l-4 border-sky-500">
+                <h3 class="text-2xl font-bold text-sky-700 mb-6 flex items-center">
+                    <svg class="w-6 h-6 mr-3 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 15v2m.5 0a.5.5 0 01-.5-.5.5.5 0 01.5-.5M15 15v2m.5 0a.5.5 0 01-.5-.5.5.5 0 01.5-.5m1 5H8.5c-.276 0-.5-.224-.5-.5v-4a.5.5 0 01.5-.5h7c.276 0 .5.224.5.5v4c0 .276-.224.5-.5.5zM12 4.5l-2.454 4.148A1 1 0 009.91 10h4.18c.287 0 .543-.166.664-.423L12 4.5zM3 15h18v6H3v-6z"></path></svg>
+                    三、 微型學習分享會 <span class="text-sm text-gray-500 font-normal ml-2">（意向調查，必填）</span>
+                </h3>
+
+                <!-- Q11: 本月主題興趣 -->
+                <div class="mb-6">
+                    <p class="form-label">11. 本月主題：「10分鐘搞定困難的醫病溝通」 您對此主題的興趣程度？<span class="required-tag">*</span></p>
+                    <div class="flex justify-between items-center mt-2 p-4 bg-sky-50 rounded-xl shadow-inner">
+                        <span class="text-sm text-gray-600 font-semibold">1 (低)</span>
+                        <div class="flex space-x-4 sm:space-x-6">
+                            <!-- Radio Scale 1-5 -->
+                            <label class="flex flex-col items-center">
+                                <input type="radio" name="topicInterest" value="1" class="w-5 h-5" required>
+                                <span class="text-sm font-medium mt-1">1</span>
+                            </label>
+                            <label class="flex flex-col items-center">
+                                <input type="radio" name="topicInterest" value="2" class="w-5 h-5" required>
+                                <span class="text-sm font-medium mt-1">2</span>
+                            </label>
+                            <label class="flex flex-col items-center">
+                                <input type="radio" name="topicInterest" value="3" class="w-5 h-5" required>
+                                <span class="text-sm font-medium mt-1">3</span>
+                            </label>
+                            <label class="flex flex-col items-center">
+                                <input type="radio" name="topicInterest" value="4" class="w-5 h-5" required>
+                                <span class="text-sm font-medium mt-1">4</span>
+                            </label>
+                            <label class="flex flex-col items-center">
+                                <input type="radio" name="topicInterest" value="5" class="w-5 h-5" required>
+                                <span class="text-sm font-medium mt-1">5</span>
+                            </label>
+                        </div>
+                        <span class="text-sm text-gray-600 font-semibold">5 (高)</span>
+                    </div>
+                </div>
+
+                <!-- Q12: 未來主題 -->
+                <div class="mb-6">
+                    <label class="form-label">12. 未來，您最希望 CR 分享哪些「同儕想聽的」實用技巧？<span class="required-tag">*</span></label>
+                    <p class="text-xs text-gray-500 mb-2">可複選，請提出「具體」建議。</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+                        <label class="choice-card">
+                            <input type="checkbox" name="futureTopic" value="臨床決策" class="w-5 h-5 rounded">
+                            <span class="ml-2 text-gray-800">臨床決策 (如：XX情況下的藥物選擇)</span>
+                        </label>
+                        <label class="choice-card">
+                            <input type="checkbox" name="futureTopic" value="實用技術" class="w-5 h-5 rounded">
+                            <span class="ml-2 text-gray-800">實用技術 (如：困難 IV、超音波引導)</span>
+                        </label>
+                        <label class="choice-card">
+                            <input type="checkbox" name="futureTopic" value="效率提升" class="w-5 h-5 rounded">
+                            <span class="ml-2 text-gray-800">效率提升 (如：快速病歷寫作、交班技巧)</span>
+                        </label>
+                        <label class="choice-card">
+                            <input type="checkbox" name="futureTopic" value="溝通應對" class="w-5 h-5 rounded">
+                            <span class="ml-2 text-gray-800">溝通應對 (如：處理客訴、安寧溝通)</span>
+                        </label>
+                        <label class="choice-card">
+                            <input type="checkbox" name="futureTopic" value="職涯與生活" class="w-5 h-5 rounded">
+                            <span class="ml-2 text-gray-800">職涯與生活 (如：次專科選擇、壓力調適)</span>
+                        </label>
+                        <!-- Q12: 其他 (包含填寫欄位) -->
+                        <div class="p-4 bg-white border border-gray-200 rounded-xl shadow-sm hover:bg-sky-50 transition">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" name="futureTopic" value="其他" id="otherTopicCheckbox" class="w-5 h-5 rounded">
+                                <span class="ml-2 text-gray-800 font-medium">其他 (請填寫)：</span>
+                            </label>
+                            <input type="text" name="futureTopicOther" id="futureTopicOther" class="form-input mt-2 p-2 text-sm" placeholder="請輸入您希望的主題">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q13: 分享意願 -->
+                <div>
+                    <p class="form-label">13. 您是否有意願在未來的場次，擔任 10 分鐘的分享者？<span class="required-tag">*</span></p>
+                    <div class="flex flex-col space-y-3 mt-2">
+                        <!-- 是 (包含填寫欄位) -->
+                        <div class="p-4 bg-white border border-gray-200 rounded-xl shadow-sm hover:bg-sky-50 transition">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="isSpeaker" value="是" id="speakerYes" class="w-5 h-5" required>
+                                <span class="ml-2 text-gray-800 font-medium">是</span>
+                            </label>
+                            <div id="speakerDetails" class="mt-3 pl-7 space-y-2 hidden border-t pt-3 border-gray-100">
+                                <input type="text" name="speakerName" class="form-input p-2 text-sm" placeholder="您的姓名">
+                                <input type="text" name="speakerTopic" class="form-input p-2 text-sm" placeholder="您想分享的主題">
+                            </div>
+                        </div>
+                        <!-- 暫無意願 -->
+                        <label class="choice-card">
+                            <input type="radio" name="isSpeaker" value="暫無意願" id="speakerNo" class="w-5 h-5" required>
+                            <span class="ml-2 text-gray-800 font-medium">暫無意願</span>
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Submit Button & Calendar -->
+            <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 pt-6 justify-center">
+                <button type="submit" class="w-full sm:w-auto bg-sky-500 hover:bg-sky-600 text-white font-black py-4 px-10 rounded-xl shadow-xl transition duration-300 transform hover:scale-[1.02] text-lg">
+                    確認報名
+                </button>
+                <button type="button" onclick="addToCalendar()" class="w-full sm:w-auto bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-4 px-10 rounded-xl shadow-md transition duration-300">
+                    加入行事曆
+                </button>
+            </div>
+        </form>
+
+        <!-- Footer -->
+        <footer class="text-center mt-10 text-gray-500 text-sm p-4">
+            <p>主辦單位：教學部</p>
+            <p>聯絡人：林淑雅 (分機57438；信箱cmh90022@mail.chimei.org.tw)</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- 全域變數/工具函數 ---
+        const getElement = (id) => document.getElementById(id);
+
+        // 使用自訂訊息框代替 alert()
+        function showMessageBox(title, message) {
+            getElement('messageTitle').textContent = title;
+            getElement('messageText').textContent = message;
+            getElement('messageBox').classList.remove('hidden');
+            getElement('messageBox').classList.add('flex');
+        }
+
+        function closeMessageBox() {
+            getElement('messageBox').classList.remove('flex');
+            getElement('messageBox').classList.add('hidden');
+        }
+
+        // --- 條件式顯示邏輯 ---
+
+        // 1. Q4 (出席) 邏輯
+        const attendanceOptions = getElement('attendanceOptions');
+        const mealSection = getElement('mealSection');
+        const mealRadios = document.getElementsByName('meal');
+
+        attendanceOptions.addEventListener('change', (e) => {
+            const isAttending = e.target.value === '出席';
+            
+            // 顯示/隱藏 餐點區塊
+            if (isAttending) {
+                mealSection.classList.remove('hidden');
+                // 如果出席，則餐點必填
+                mealRadios.forEach(radio => radio.required = true);
+            } else {
+                mealSection.classList.add('hidden');
+                // 如果不出席，則餐點非必填，並清除選取
+                mealRadios.forEach(radio => {
+                    radio.required = false;
+                    radio.checked = false;
+                });
+            }
+        });
+
+        // 2. Q6 (提案意願) 邏輯
+        const issueIntentOptions = getElement('issueIntentOptions');
+        const issueDetailsSection = getElement('issueDetailsSection');
+        const issueDetailsFields = issueDetailsSection.querySelectorAll('input, textarea');
+
+        issueIntentOptions.addEventListener('change', (e) => {
+            const wantsToPropose = e.target.value === '是';
+            
+            // 顯示/隱藏 提案內容區塊 (Q7-Q10)
+            if (wantsToPropose) {
+                issueDetailsSection.classList.remove('hidden');
+                issueDetailsSection.classList.add('block');
+                // 設為必填 (Q10隱私是必選)
+                document.getElementsByName('issuePrivacy').forEach(radio => radio.required = true);
+                document.getElementById('issueDescription').required = true;
+                document.getElementById('issueSuggestion').required = true;
+
+            } else {
+                issueDetailsSection.classList.add('hidden');
+                issueDetailsSection.classList.remove('block');
+                // 設為非必填，並清除內容
+                issueDetailsFields.forEach(field => {
+                    if (field.type === 'radio' || field.type === 'checkbox') {
+                        field.checked = false;
+                    } else if (field.tagName === 'TEXTAREA' || field.type === 'text') {
+                        field.value = '';
+                    }
+                });
+                document.getElementsByName('issuePrivacy').forEach(radio => radio.required = false);
+                document.getElementById('issueDescription').required = false;
+                document.getElementById('issueSuggestion').required = false;
+            }
+        });
+
+        // 3. Q13 (分享意願) 邏輯
+        const speakerYes = getElement('speakerYes');
+        const speakerNo = getElement('speakerNo');
+        const speakerDetails = getElement('speakerDetails');
+        const speakerNameInput = speakerDetails.querySelector('input[name="speakerName"]');
+        const speakerTopicInput = speakerDetails.querySelector('input[name="speakerTopic"]');
+
+        function updateSpeakerDetails() {
+            if (speakerYes.checked) {
+                speakerDetails.classList.remove('hidden');
+                speakerNameInput.required = true;
+                speakerTopicInput.required = true;
+            } else {
+                speakerDetails.classList.add('hidden');
+                speakerNameInput.required = false;
+                speakerTopicInput.required = false;
+                speakerNameInput.value = '';
+                speakerTopicInput.value = '';
+            }
+        }
+
+        speakerYes.addEventListener('change', updateSpeakerDetails);
+        speakerNo.addEventListener('change', updateSpeakerDetails);
+
+        // --- 表單提交處理 ---
+        getElement('registrationForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const form = event.target;
+            const formData = new FormData(form);
+            const data = {};
+
+            // 收集所有欄位數據
+            formData.forEach((value, key) => {
+                // 忽略未勾選的 checkbox
+                if (key === 'issueType' || key === 'futureTopic') {
+                    if (!data[key]) {
+                        data[key] = [];
+                    }
+                    data[key].push(value);
+                } else if (key === 'futureTopicOther' && value === '') {
+                    // 忽略空白的其他主題
+                } 
+                else {
+                    data[key] = value;
+                }
+            });
+
+            // 格式化輸出結果
+            let resultMessage = "感謝您的報名與提案！您提交的資料已彙整完成。\n\n";
+            resultMessage += "--- 填寫摘要 (將送交行政單位) ---\n\n";
+            resultMessage += `【基本資料】\n`;
+            resultMessage += `• 科別/職級/姓名: ${data.department} / ${data.rank} / ${data.name}\n`;
+            resultMessage += `• 出席意願: ${data.attendance}\n`;
+            if (data.attendance === '出席') {
+                resultMessage += `• 餐點需求: ${data.meal}\n`;
+            }
+
+            resultMessage += `\n【議題提案】\n`;
+            resultMessage += `• 提案意願: ${data.hasIssue}\n`;
+            if (data.hasIssue === '是') {
+                resultMessage += `• 議題類別: ${data.issueType ? data.issueType.join(', ') : '未選'}\n`;
+                resultMessage += `• 案由說明 (摘要): ${data.issueDescription.substring(0, 30)}...\n`;
+                resultMessage += `• 提案隱私: ${data.issuePrivacy}\n`;
+            } else {
+                resultMessage += "• 無提案\n";
+            }
+
+            resultMessage += `\n【微型分享會】\n`;
+            resultMessage += `• 本月興趣程度: ${data.topicInterest} / 5\n`;
+            resultMessage += `• 未來希望主題: ${data.futureTopic ? data.futureTopic.join(', ') : '未選'}\n`;
+            if (data.futureTopic && data.futureTopic.includes('其他') && data.futureTopicOther) {
+                resultMessage += `(其他建議: ${data.futureTopicOther})\n`;
+            }
+            
+            resultMessage += `• 擔任分享者意願: ${data.isSpeaker}\n`;
+            if (data.isSpeaker === '是') {
+                resultMessage += `(分享主題: ${data.speakerTopic})\n`;
+            }
+            
+            // 顯示確認訊息
+            showMessageBox("報名提交成功", resultMessage);
+        });
+
+        // --- 行事曆功能 ---
+        function addToCalendar() {
+            // 事件資訊 (使用文件提供的日期時間)
+            const eventTitle = "住院醫師座談暨微型分享餐會";
+            const eventDetails = "與醫院高層的直接溝通平台，旨在解決臨床、教學、福利等系統性問題。請參考報名表內容。";
+            const eventLocation = "醫院指定會議室 (未指定，使用 Placeholder)";
+            
+            // 使用 2025 年 12 月 3 日 12:00 作為 Placeholder
+            const eventDate = { year: 2025, month: 12, day: 3, hour: 12, minute: 0 }; 
+
+            const startDate = new Date(eventDate.year, eventDate.month - 1, eventDate.day, eventDate.hour, eventDate.minute);
+            // 假設活動持續 1.5 小時
+            const endDate = new Date(startDate.getTime() + 90 * 60000); 
+
+            const formatDateTime = (date) => {
+                const pad = (num) => (num < 10 ? '0' : '') + num;
+                return date.getFullYear() + 
+                       pad(date.getMonth() + 1) + 
+                       pad(date.getDate()) + 'T' + 
+                       pad(date.getHours()) + 
+                       pad(date.getMinutes()) + '00';
+            };
+
+            const startTime = formatDateTime(startDate);
+            const endTime = formatDateTime(endDate);
+
+            // Google Calendar URL 格式
+            const googleUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventTitle)}&dates=${startTime}/${endTime}&details=${encodeURIComponent(eventDetails)}&location=${encodeURIComponent(eventLocation)}`;
+            
+            window.open(googleUrl, '_blank');
+            showMessageBox("加入行事曆", "已為您開啟 Google 行事曆，請檢查彈出視窗。");
+        }
+
+        // 初始載入時檢查一次，以防萬一
+        window.onload = () => {
+             updateSpeakerDetails();
+             
+             // 確保 Q4, Q6 的初始狀態 (若有預設選取則觸發 change event)
+             const initialAttendance = document.querySelector('input[name="attendance"]:checked');
+             if(initialAttendance) {
+                 attendanceOptions.dispatchEvent(new Event('change'));
+             } else {
+                 // 確保初始狀態下餐點選項是隱藏且非必填
+                 mealSection.classList.add('hidden');
+                 document.getElementsByName('meal').forEach(radio => radio.required = false);
+             }
+             
+             const initialIssueIntent = document.querySelector('input[name="hasIssue"]:checked');
+             if(initialIssueIntent) {
+                 issueIntentOptions.dispatchEvent(new Event('change'));
+             } else {
+                 // 確保初始狀態下提案詳情是隱藏且非必填
+                 issueDetailsSection.classList.add('hidden');
+                 document.getElementsByName('issuePrivacy').forEach(radio => radio.required = false);
+                 document.getElementById('issueDescription').required = false;
+                 document.getElementById('issueSuggestion').required = false;
+             }
+        }
+    </script>
+</body>
+</html>
